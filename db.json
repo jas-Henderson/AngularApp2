@@ -1,0 +1,10 @@
+{
+    "appointments": [
+        {
+            "id": 1,
+            "clientName": "Alice",
+            "service": "Haircut",
+            "time": "2025-07-15T10:00"
+        }
+    ]
+}
