@@ -1,0 +1,19 @@
+<h2>Book an Appointment</h2>
+<form (submit)="submit(); $event.preventDefault()">
+  <label>
+    Name:
+    <input type="text" [(ngModel)]="clientName" name="clientName" required />
+  </label><br /><br />
+
+  <label>
+    Service:
+    <input type="text" [(ngModel)]="service" name="service" required />
+  </label><br /><br />
+
+  <label>
+    Time:
+    <input type="datetime-local" [(ngModel)]="time" name="time" required />
+  </label><br /><br />
+
+  <button type="submit">Book Appointment</button>
+</form>

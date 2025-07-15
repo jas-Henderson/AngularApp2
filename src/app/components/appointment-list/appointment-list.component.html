@@ -1,0 +1,13 @@
+<h2>Scheduled Appointments</h2>
+
+<ul *ngIf="appointments.length; else noAppointments">
+  <li *ngFor="let appt of appointments">
+    <strong>{{ appt.clientName }}</strong> - {{ appt.service }} - 
+    {{ appt.time | date: 'medium' }}
+    <button (click)="cancelAppointment(appt.id!)">Cancel</button>
+  </li>
+</ul>
+
+<ng-template #noAppointments>
+  <p>No appointments scheduled.</p>
+</ng-template>
