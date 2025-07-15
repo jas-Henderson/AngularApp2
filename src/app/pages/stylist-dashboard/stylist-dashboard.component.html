@@ -1,0 +1,23 @@
+<div class="dashboard">
+  <h2>Stylist Dashboard</h2>
+
+  <label for="stylistSelect">Select Stylist:</label>
+  <select id="stylistSelect" [(ngModel)]="selectedStylist" (change)="onStylistSelect()">
+    <option value="" disabled selected>Select your name</option>
+    <option *ngFor="let stylist of stylists" [value]="stylist">{{ stylist }}</option>
+  </select>
+
+  <div *ngIf="filteredAppointments.length > 0; else noAppointments">
+    <h3>Appointments for {{ selectedStylist }}</h3>
+    <ul class="appointment-list">
+      <li *ngFor="let appt of filteredAppointments">
+        <strong>{{ appt.time | date: 'short' }}</strong> —
+        {{ appt.clientName }} ({{ appt.service }})
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #noAppointments>
+    <p *ngIf="selectedStylist">No appointments found for {{ selectedStylist }}.</p>
+  </ng-template>
+</div>

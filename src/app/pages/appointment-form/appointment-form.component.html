@@ -1,0 +1,59 @@
+<div class="form-container">
+  <h2>Book an Appointment</h2>
+
+  <form (ngSubmit)="submitAppointment()" #appointmentForm="ngForm">
+    <label for="clientName">Your Name</label>
+    <input
+      type="text"
+      id="clientName"
+      name="clientName"
+      required
+      [(ngModel)]="appointment.clientName"
+    />
+
+    <label for="service">Service</label>
+    <select
+      id="service"
+      name="service"
+      required
+      [(ngModel)]="appointment.service"
+    >
+      <option value="Haircut">Haircut</option>
+      <option value="Color">Color</option>
+      <option value="Styling">Styling</option>
+    </select>
+
+    <label for="stylist">Stylist</label>
+    <select
+      id="stylist"
+      name="stylist"
+      required
+      [(ngModel)]="appointment.stylist"
+    >
+      <option value="Ashley">Ashley</option>
+      <option value="Jordan">Jordan</option>
+      <option value="Casey">Casey</option>
+    </select>
+
+    <label for="time">Date and Time</label>
+    <input
+      type="datetime-local"
+      id="time"
+      name="time"
+      required
+      [(ngModel)]="appointment.time"
+    />
+
+    <button type="submit" [disabled]="appointmentForm.invalid">Book Now</button>
+  </form>
+
+  <div class="calendar-view">
+    <h3>Upcoming Appointments</h3>
+    <ul>
+      <li *ngFor="let a of appointments">
+        <strong>{{ a.time | date: 'short' }}</strong> -
+        {{ a.clientName }} with {{ a.stylist }} ({{ a.service }})
+      </li>
+    </ul>
+  </div>
+</div>
