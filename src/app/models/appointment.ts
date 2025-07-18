@@ -1,4 +1,4 @@
-export interface Appointment {
+export interface Appointment { // Interface to define the structure of an appointment object
   id?: number;
   clientName: string;
   service: string;

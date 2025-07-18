@@ -1,25 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'; // Import necessary testing utilities from Angular core
+import { StylistDashboardComponent } from './stylist-dashboard.component'; // Import the component to be tested
 
-import { StylistDashboardComponent } from './stylist-dashboard.component';
-
-describe('StylistDashboardComponent', () => {
+describe('StylistDashboardComponent', () => { // Describe the test suite for StylistDashboardComponent
   let component: StylistDashboardComponent;
   let fixture: ComponentFixture<StylistDashboardComponent>;
 
-  beforeEach(async () => {
+  beforeEach(async () => { // Configure the testing module before each test
     await TestBed.configureTestingModule({
       declarations: [ StylistDashboardComponent ]
     })
     .compileComponents();
   });
 
-  beforeEach(() => {
+  beforeEach(() => { // Create the component instance and fixture before each test
     fixture = TestBed.createComponent(StylistDashboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', () => { // Test to check if the component is created successfully
     expect(component).toBeTruthy();
   });
 });

@@ -1,7 +1,7 @@
-<div class="form-container">
+<div class="form-container"> <!-- Main container for the appointment form -->
   <h2>Book an Appointment</h2>
 
-  <form (ngSubmit)="submitAppointment()" #appointmentForm="ngForm">
+  <form (ngSubmit)="submitAppointment()" #appointmentForm="ngForm">  <!-- Form submission handler -->
     <label for="clientName">Your Name</label>
     <input
       type="text"
@@ -11,7 +11,7 @@
       [(ngModel)]="appointment.clientName"
     />
 
-    <label for="service">Service</label>
+    <label for="service">Service</label> <!-- Dropdown for selecting the service -->
     <select
       id="service"
       name="service"
@@ -23,7 +23,7 @@
       <option value="Styling">Styling</option>
     </select>
 
-    <label for="stylist">Stylist</label>
+    <label for="stylist">Stylist</label> <!-- Dropdown for selecting the stylist -->
     <select
       id="stylist"
       name="stylist"
@@ -35,7 +35,7 @@
       <option value="Casey">Casey</option>
     </select>
 
-    <label for="time">Date and Time</label>
+    <label for="time">Date and Time</label> <!-- Input for selecting the date and time -->
     <input
       type="datetime-local"
       id="time"
@@ -44,13 +44,13 @@
       [(ngModel)]="appointment.time"
     />
 
-    <button type="submit" [disabled]="appointmentForm.invalid">Book Now</button>
+    <button type="submit" [disabled]="appointmentForm.invalid">Book Now</button> <!-- Submit button, disabled if form is invalid -->
   </form>
 
-  <div class="calendar-view">
+  <div class="calendar-view"> <!-- Section to display upcoming appointments -->
     <h3>Upcoming Appointments</h3>
     <ul>
-      <li *ngFor="let a of appointments">
+      <li *ngFor="let a of appointments"> <!-- Loop through appointments and display each one -->
         <strong>{{ a.time | date: 'short' }}</strong> -
         {{ a.clientName }} with {{ a.stylist }} ({{ a.service }})
       </li>

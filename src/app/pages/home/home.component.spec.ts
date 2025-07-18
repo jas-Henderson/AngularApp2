@@ -1,25 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'; // Import necessary testing utilities from Angular core
+import { HomeComponent } from './home.component'; // Import the component to be tested
 
-import { HomeComponent } from './home.component';
-
-describe('HomeComponent', () => {
+describe('HomeComponent', () => { // Describe the test suite for HomeComponent
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
 
-  beforeEach(async () => {
+  beforeEach(async () => { // Configure the testing module before each test
     await TestBed.configureTestingModule({
       declarations: [ HomeComponent ]
     })
     .compileComponents();
   });
 
-  beforeEach(() => {
+  beforeEach(() => { // Create the component instance and fixture before each test
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', () => { // Test to check if the component is created successfully
     expect(component).toBeTruthy();
   });
 });
