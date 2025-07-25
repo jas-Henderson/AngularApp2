@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core'; // Import necessary Angular core components
 
-@Component({ // Decorator to define the component metadata
-  selector: 'app-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.css']
+@Component({
+    selector: 'app-calendar',
+    templateUrl: './calendar.component.html',
+    styleUrls: ['./calendar.component.css'],
+    standalone: false
 })
 export class CalendarComponent implements OnInit { // Class definition for the Calendar component 
 

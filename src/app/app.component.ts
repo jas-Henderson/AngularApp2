@@ -3,10 +3,11 @@ import { FirebaseDataService } from './services/firebase-data.service'; // Impor
 import { HighlightDirective } from './directives/highlight.directive'; // Import custom directive for highlighting elements
 import { Observable } from 'rxjs'; // Import Observable for working with asynchronous data streams
 
-@Component({ // Decorator to define the component metadata
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+@Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css'],
+    standalone: false
 })
 export class AppComponent { // Class definition for the main application component
   title = 'AngularApp2'; // Application title

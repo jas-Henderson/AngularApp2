@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core'; // Import necessary Angular core components
 
-@Component({ // Decorator to define the component metadata
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+@Component({
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.css'],
+    standalone: false
 })
 export class HomeComponent implements OnInit { // Class definition for the Home component
 

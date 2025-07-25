@@ -1,8 +1,8 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core'; // Import necessary Angular core directives and services
 
-@Directive({ // Decorator to define the directive metadata
-  selector: '[appHighlight]',
-  
+@Directive({
+    selector: '[appHighlight]',
+    standalone: false
 })
 export class HighlightDirective { // Class definition for the Highlight directive
   @Input() appHighlight = '';

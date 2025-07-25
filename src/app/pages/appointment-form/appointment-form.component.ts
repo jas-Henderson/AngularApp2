@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core'; // Import necessary Angular c
 import { AppointmentService } from '../../services/appointment.service'; // Service to handle appointment data
 import { Appointment } from '../../models/appointment'; // Shared model for appointments
 
-@Component({ // Decorator to define the component metadata
-  selector: 'app-appointment-form', // Selector for the component
-  templateUrl: './appointment-form.component.html', // Template for the component
-  styleUrls: ['./appointment-form.component.css'], // Styles for the component
+@Component({
+    selector: 'app-appointment-form', // Selector for the component
+    templateUrl: './appointment-form.component.html', // Template for the component
+    styleUrls: ['./appointment-form.component.css'],
+    standalone: false
 })
 export class AppointmentFormComponent implements OnInit { // Class definition for the component
   appointment: Appointment = { // Initialize the appointment object with default values

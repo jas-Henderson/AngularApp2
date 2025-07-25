@@ -4,9 +4,10 @@ import { FirebaseDataService } from '../../services/firebase-data.service'; // N
 import { Appointment } from '../../models/appointment'; // Shared model interface
 
 @Component({
-  selector: 'app-stylist-dashboard',
-  templateUrl: './stylist-dashboard.component.html',
-  styleUrls: ['./stylist-dashboard.component.css'],
+    selector: 'app-stylist-dashboard',
+    templateUrl: './stylist-dashboard.component.html',
+    styleUrls: ['./stylist-dashboard.component.css'],
+    standalone: false
 })
 export class StylistDashboardComponent implements OnInit {
 
