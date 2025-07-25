@@ -5,24 +5,31 @@
   <label for="stylistSelect">Select Stylist:</label>
   <select id="stylistSelect" [(ngModel)]="selectedStylist" (change)="onStylistSelect()">
     <option value="" disabled selected>Select your name</option>
-    <option *ngFor="let stylist of stylists" [value]="stylist">{{ stylist }}</option>
+    @for (stylist of stylists; track stylist) {
+      <option [value]="stylist">{{ stylist }}</option>
+    }
   </select>
 
   <!-- Appointment list display -->
-  <div *ngIf="filteredAppointments.length > 0; else noAppointments">
-    <h3>Appointments for {{ selectedStylist }}</h3>
-    <ul class="appointment-list">
-      <li *ngFor="let appt of filteredAppointments">
-        <strong>{{ appt.time | date: 'short' }}</strong> —
-        {{ appt.clientName }} ({{ appt.service }})
-      </li>
-    </ul>
-  </div>
+  @if (filteredAppointments.length > 0) {
+    <div>
+      <h3>Appointments for {{ selectedStylist }}</h3>
+      <ul class="appointment-list">
+        @for (appt of filteredAppointments; track appt) {
+          <li>
+            <strong>{{ appt.time | date: 'short' }}</strong> —
+            {{ appt.clientName }} ({{ appt.service }})
+          </li>
+        }
+      </ul>
+    </div>
+  } @else {
+    @if (selectedStylist) {
+      <p>No appointments found for {{ selectedStylist }}.</p>
+    }
+  }
 
   <!-- Message shown if no appointments found -->
-  <ng-template #noAppointments>
-    <p *ngIf="selectedStylist">No appointments found for {{ selectedStylist }}.</p>
-  </ng-template>
 
   <hr />
 
@@ -39,17 +46,23 @@
   </form>
 
   <!-- Display fetched Firebase data from array -->
-  <div *ngIf="fetchedData.length > 0">
-    <h4>Firebase Entries:</h4>
-    <ul>
-      <li *ngFor="let entry of fetchedData">
-        {{ entry.name }} — {{ entry.message }}
-      </li>
-    </ul>
-  </div>
+  @if (fetchedData.length > 0) {
+    <div>
+      <h4>Firebase Entries:</h4>
+      <ul>
+        @for (entry of fetchedData; track entry) {
+          <li>
+            {{ entry.name }} — {{ entry.message }}
+          </li>
+        }
+      </ul>
+    </div>
+  }
 
   <!-- Message if no entries are found -->
-  <div *ngIf="fetchedData.length === 0">
-    <p>No entries found in Firebase.</p>
-  </div>
+  @if (fetchedData.length === 0) {
+    <div>
+      <p>No entries found in Firebase.</p>
+    </div>
+  }
 </div>
