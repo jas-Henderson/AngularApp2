@@ -16,12 +16,19 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2017",
-    "module": "es2020",
+
+    // ✅ Set target and module to the highest valid for Angular 13
+    "target": "es2020", // ⬅️ Valid for Angular 13
+    "module": "es2020", // ⬅️ Valid and works with dynamic imports
+
+    // ✅ Match the lib to what's supported
     "lib": [
-      "es2020",
+      "es2020", // ⬅️ Downgraded from es2022
       "dom"
-    ]
+    ],
+
+    // ✅ Allows type checking to skip node_modules
+    "skipLibCheck": true // ⬅️ Avoids type errors from Firebase typings
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

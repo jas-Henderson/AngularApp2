@@ -1,17 +1,22 @@
-import { NgModule } from '@angular/core'; // Import necessary Angular core modules
-import { RouterModule, Routes } from '@angular/router'; // Import Angular routing modules
-import { AppointmentFormComponent } from './pages/appointment-form/appointment-form.component'; // Import the appointment form component
-import { StylistDashboardComponent } from './pages/stylist-dashboard/stylist-dashboard.component'; // Import the stylist dashboard component
-import { HomeComponent } from './pages/home/home.component'; // Import the home component
+import { NgModule } from '@angular/core'; // Import Angular core module
+import { RouterModule, Routes } from '@angular/router'; // Import Angular router
 
-const routes: Routes = [ // Define the application routes
-  { path: '', component: HomeComponent },
-  { path: 'appointments', component: AppointmentFormComponent },
-  { path: 'dashboard', component: StylistDashboardComponent },
+// Import application components to be routed
+import { AppointmentFormComponent } from './pages/appointment-form/appointment-form.component';
+import { StylistDashboardComponent } from './pages/stylist-dashboard/stylist-dashboard.component';
+import { HomeComponent } from './pages/home/home.component';
+
+const routes: Routes = [
+  { path: '', component: HomeComponent }, // Default home route
+  { path: 'appointments', component: AppointmentFormComponent }, // Appointment form
+  { path: 'dashboard', component: StylistDashboardComponent }, // Stylist dashboard
+
+  // ⬇️ Redirect any unknown path to HomeComponent
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
-@NgModule({ // Decorator to define the module metadata
+@NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {} // Export the AppRoutingModule to be used in the main application module
+export class AppRoutingModule {} // Export routing module to be imported in app.module.ts

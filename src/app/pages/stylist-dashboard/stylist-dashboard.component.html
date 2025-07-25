@@ -1,12 +1,14 @@
 <div class="dashboard">
   <h2>Stylist Dashboard</h2>
 
+  <!-- Stylist selector dropdown -->
   <label for="stylistSelect">Select Stylist:</label>
   <select id="stylistSelect" [(ngModel)]="selectedStylist" (change)="onStylistSelect()">
     <option value="" disabled selected>Select your name</option>
     <option *ngFor="let stylist of stylists" [value]="stylist">{{ stylist }}</option>
   </select>
 
+  <!-- Appointment list display -->
   <div *ngIf="filteredAppointments.length > 0; else noAppointments">
     <h3>Appointments for {{ selectedStylist }}</h3>
     <ul class="appointment-list">
@@ -17,7 +19,37 @@
     </ul>
   </div>
 
+  <!-- Message shown if no appointments found -->
   <ng-template #noAppointments>
     <p *ngIf="selectedStylist">No appointments found for {{ selectedStylist }}.</p>
   </ng-template>
+
+  <hr />
+
+  <!-- Firebase Data Form -->
+  <h3>Save Message to Firebase</h3>
+  <form (ngSubmit)="saveToFirebase()">
+    <label for="name">Name:</label>
+    <input type="text" id="name" [(ngModel)]="formData.name" name="name" required />
+
+    <label for="message">Message:</label>
+    <input type="text" id="message" [(ngModel)]="formData.message" name="message" required />
+
+    <button type="submit">Save</button>
+  </form>
+
+  <!-- Display fetched Firebase data from array -->
+  <div *ngIf="fetchedData.length > 0">
+    <h4>Firebase Entries:</h4>
+    <ul>
+      <li *ngFor="let entry of fetchedData">
+        {{ entry.name }} — {{ entry.message }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Message if no entries are found -->
+  <div *ngIf="fetchedData.length === 0">
+    <p>No entries found in Firebase.</p>
+  </div>
 </div>
