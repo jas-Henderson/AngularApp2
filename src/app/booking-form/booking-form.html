@@ -1,68 +1,67 @@
-<form (ngSubmit)="submitBooking()" #bookingForm="ngForm" novalidate>
-  <!-- Stylist Dropdown -->
+<!-- src/app/booking-form/booking-form.html -->
+
+<div class="booking-form">
+  <h2>Book an Appointment</h2>
+
+  <!-- Stylist -->
   <label for="stylist">Select Stylist:</label>
   <select
-    name="stylist"
+    id="stylist"
     [(ngModel)]="stylist"
-    #stylistRef="ngModel"
-    required
-    [ngClass]="{ 'valid': stylistRef.valid && stylistRef.touched }"
     (change)="loadAvailableTimes()"
+    required
   >
     <option value="" disabled selected>Select a stylist</option>
-    <option *ngFor="let s of stylists" [value]="s.email">{{ s.name }} ({{ s.email }})</option>
+    <option *ngFor="let s of stylists" [value]="s.id">{{ s.name }}</option>
   </select>
 
-  <!-- Service Dropdown -->
+  <!-- Service -->
   <label for="service">Select Service:</label>
   <select
-    name="service"
+    id="service"
     [(ngModel)]="selectedService"
     (change)="onServiceChange()"
-    #serviceRef="ngModel"
     required
-    [ngClass]="{ 'valid': serviceRef.valid && serviceRef.touched }"
   >
     <option value="" disabled selected>Select a service</option>
-    <option *ngFor="let service of services" [value]="service.name">{{ service.name }}</option>
+    <option *ngFor="let service of services" [value]="service.name">
+      {{ service.name }} ({{ service.duration }} mins)
+    </option>
   </select>
 
-  <!-- Date Picker -->
-  <label for="date">Select Date:</label>
+  <!-- Date -->
+  <label for="appointmentDate">Select Date:</label>
   <input
     type="date"
-    name="date"
+    id="appointmentDate"
     [(ngModel)]="appointmentDate"
-    #dateRef="ngModel"
-    required
-    [ngClass]="{ 'valid': dateRef.valid && dateRef.touched }"
     (change)="loadAvailableTimes()"
+    required
   />
 
-  <!-- Time Dropdown -->
-  <label for="time">Select Time:</label>
+  <!-- Time -->
+  <label for="appointmentTime">Select Time:</label>
   <select
-    name="time"
+    id="appointmentTime"
     [(ngModel)]="appointmentTime"
-    #timeRef="ngModel"
     required
-    [ngClass]="{ 'valid': timeRef.valid && timeRef.touched }"
+    [disabled]="availableTimes.length === 0"
   >
-    <option value="" disabled selected>Select a time</option>
-    <option *ngFor="let time of availableTimes" [value]="time">{{ time }}</option>
+    <option value="" disabled selected>
+      {{ availableTimes.length === 0 ? 'No available times' : 'Select a time' }}
+    </option>
+    <option *ngFor="let time of availableTimes" [value]="time">
+      {{ time }}
+    </option>
   </select>
 
-  <!-- Duration Display -->
-  <div *ngIf="appointmentDuration">
-    <p><strong>Duration:</strong> {{ appointmentDuration }} minutes</p>
+  <!-- Submit -->
+  <button (click)="submitBooking()" [disabled]="!stylist || !selectedService || !appointmentDate || !appointmentTime">
+    Book Appointment
+  </button>
+
+  <!-- Confirmation -->
+  <div *ngIf="showConfirmation" class="confirmation">
+    ✅ Your appointment has been successfully booked!
   </div>
-
-  <!-- Submit Button -->
-  <button type="submit" [disabled]="!bookingForm.valid">Book Appointment</button>
-</form>
-
-<!-- Confirmation Modal -->
-<div *ngIf="showConfirmation" class="confirmation-modal">
-  <p>Booking submitted successfully!</p>
-  <button (click)="showConfirmation = false">Close</button>
 </div>
