@@ -1,7 +1,7 @@
 <div class="dashboard">
   <h2>Admin Dashboard</h2>
 
-  <!-- 🧑‍💼 Register New Stylist -->
+  <!-- Register New Stylist -->
   <section class="card">
     <h3>Register New Stylist</h3>
     <form (ngSubmit)="registerStylist()" #stylistForm="ngForm">
@@ -27,23 +27,23 @@
     </div>
   </section>
 
-  <!-- 📧 Display logged-in stylist -->
-  <p><strong>Logged in as:</strong> {{ stylistEmail }}</p>
+  <!-- Display logged-in stylist -->
+  <p *ngIf="stylistEmail"><strong>Logged in as:</strong> {{ stylistEmail }}</p>
 
-  <!-- 📅 Date Selection -->
+  <!-- Date Selection -->
   <section class="card">
     <h3>Select a Date</h3>
     <input
       type="date"
-      [(ngModel)]="availabilityDate"
-      (ngModelChange)="loadAvailabilityForDate($event)"
+      [ngModel]="selectedDate"
+      (ngModelChange)="onDateChange($event)"
     />
-    <div *ngIf="hasAppointment(availabilityDate)">
+    <div *ngIf="hasAppointment(selectedDate)">
       <p>📌 Appointment(s) booked on this day.</p>
     </div>
   </section>
 
-  <!-- 💇 Services You Offer -->
+  <!-- Services You Offer -->
   <section class="card">
     <h3>Services You Offer</h3>
     <div *ngFor="let service of services">
@@ -58,9 +58,9 @@
     </div>
   </section>
 
-  <!-- ⏰ Availability for Selected Date -->
+  <!-- Availability for Selected Date -->
   <section class="card">
-    <h3>Your Availability on {{ availabilityDate }}</h3>
+    <h3>Your Availability on {{ selectedDate }}</h3>
     <input
       [(ngModel)]="newAvailabilityTime"
       type="time"
@@ -68,23 +68,28 @@
     />
     <button (click)="addAvailabilityTime()">Add</button>
 
-    <ul>
-      <li *ngFor="let time of availability[availabilityDate]">
+    <ul *ngIf="(availability[selectedDate]?.length || 0) > 0; else noAvailability">
+      <li *ngFor="let time of (availability[selectedDate] || [])">
         {{ time }}
         <button (click)="removeAvailabilityTime(time)">Remove</button>
       </li>
     </ul>
+    <ng-template #noAvailability>
+      <p>No availability set for this date.</p>
+    </ng-template>
   </section>
 
-  <!-- 📋 Bookings List -->
+  <!-- Bookings List -->
   <section class="card">
     <h3>Your Bookings on {{ selectedDate }}</h3>
-    <ul>
+    <ul *ngIf="bookings.length > 0; else noBookings">
       <li *ngFor="let b of bookings">
-        {{ b.appointmentDate }} &#64; {{ b.appointmentTime }} -
+        📆 {{ b.appointmentDate }} &#64; {{ b.appointmentTime }} -
         <strong>{{ b.service }}</strong> ({{ b.stylist }})
       </li>
     </ul>
+    <ng-template #noBookings>
+      <p>No bookings found for this date.</p>
+    </ng-template>
   </section>
-
 </div>

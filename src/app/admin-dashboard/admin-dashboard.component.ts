@@ -45,7 +45,7 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.loadAuthStylist();
-    this.loadFullSchedule(); // ✅ Load complete booking list for dashboard display
+    this.loadFullSchedule();
   }
 
   async loadAuthStylist() {
@@ -53,32 +53,33 @@ export class AdminDashboardComponent implements OnInit {
     const user = auth.currentUser;
     if (user) {
       this.stylistId = user.uid;
-      this.stylistEmail = user.email ?? '';
+      this.stylistEmail = (user.email ?? '').trim().toLowerCase(); // Normalize
       this.loadBookings();
       this.loadServices();
       this.loadAvailabilityForDate(this.availabilityDate);
     }
   }
 
-  // 🔹 Load stylist-specific bookings for selected date
+  // Load stylist-specific bookings for selected date
   loadBookings() {
     if (this.stylistEmail) {
+      const normalizedEmail = this.stylistEmail.trim().toLowerCase();
       this.firebaseService
-        .getBookingsForStylist(this.stylistEmail, this.selectedDate)
+        .getBookingsForStylist(normalizedEmail, this.selectedDate)
         .subscribe(data => {
           this.bookings = data;
         });
     }
   }
 
-  // 🔹 Load all bookings for admin view
+  // Load all bookings (optional for admin reporting)
   loadFullSchedule() {
     this.firebaseService.getBookings().then(data => {
       this.fullSchedule = data;
     });
   }
 
-  // 🔹 Trigger on manual date change
+  // Triggered when changing the date picker
   onDateChange(date: string) {
     this.selectedDate = date;
     this.availabilityDate = date;
@@ -86,21 +87,21 @@ export class AdminDashboardComponent implements OnInit {
     this.loadAvailabilityForDate(date);
   }
 
-  // 🔹 Load Firebase services
+  // Load services from Firebase
   loadServices() {
     this.firebaseService.getStylistServices(this.stylistId).subscribe(data => {
       this.selectedServices = data;
     });
   }
 
-  // 🔹 Load availability
+  // Load availability from Firebase
   loadAvailabilityForDate(date: string) {
     this.firebaseService.getStylistAvailability(this.stylistId, date).subscribe(times => {
       this.availability[date] = times;
     });
   }
 
-  // 🔹 Toggle services
+  // Toggle checkbox for offered services
   toggleService(serviceName: string) {
     if (this.selectedServices.includes(serviceName)) {
       this.selectedServices = this.selectedServices.filter(s => s !== serviceName);
@@ -114,7 +115,7 @@ export class AdminDashboardComponent implements OnInit {
     this.firebaseService.saveStylistServices(this.stylistId, this.selectedServices);
   }
 
-  // 🔹 Add or remove availability
+  // Add/remove availability times
   addAvailabilityTime() {
     if (!this.availability[this.availabilityDate]) {
       this.availability[this.availabilityDate] = [];
@@ -144,7 +145,7 @@ export class AdminDashboardComponent implements OnInit {
     return this.bookings.some(b => b.appointmentDate === date);
   }
 
-  // 🔹 Register new stylist
+  //  Register new stylist
   registerStylist() {
     const auth = getAuth();
     this.stylistRegistrationSuccess = false;
@@ -153,11 +154,13 @@ export class AdminDashboardComponent implements OnInit {
     createUserWithEmailAndPassword(auth, this.newStylist.email, this.newStylist.password)
       .then(userCredential => {
         const uid = userCredential.user.uid;
-        return this.firebaseService.saveStylistProfile(uid, this.newStylist.email, this.newStylist.name);
+        const email = this.newStylist.email.trim().toLowerCase(); // Normalize
+        return this.firebaseService.saveStylistProfile(uid, email, this.newStylist.name);
       })
       .then(() => {
         this.stylistRegistrationSuccess = true;
         this.newStylist = { name: '', email: '', password: '' };
+        this.loadFullSchedule(); // Optional refresh
       })
       .catch(error => {
         console.error(error);

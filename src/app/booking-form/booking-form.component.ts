@@ -71,7 +71,7 @@ export class BookingFormComponent implements OnInit {
 
     const booking: Booking = {
       stylist: selectedStylist.name,
-      stylistEmail: selectedStylist.email,
+      stylistEmail: selectedStylist.email.trim().toLowerCase(),
       service: this.selectedService,
       appointmentDate: this.appointmentDate,
       appointmentTime: this.appointmentTime,
