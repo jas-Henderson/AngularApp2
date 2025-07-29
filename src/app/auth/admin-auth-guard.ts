@@ -1,18 +1,21 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
+import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class AdminAuthGuard implements CanActivate {
-  constructor(private router: Router) {}
+export const AdminAuthGuard: CanActivateFn = (): Observable<boolean> => {
+  const auth = inject(Auth);
+  const router = inject(Router);
 
-  canActivate(): boolean {
-    const isLoggedIn = localStorage.getItem('stylistLoggedIn') === 'true';
-    if (!isLoggedIn) {
-      this.router.navigate(['/login']);
-      return false;
-    }
-    return true;
-  }
-}
+  return new Observable<boolean>((observer) => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        observer.next(true);
+      } else {
+        router.navigate(['/login']);
+        observer.next(false);
+      }
+      observer.complete();
+    });
+  });
+};
