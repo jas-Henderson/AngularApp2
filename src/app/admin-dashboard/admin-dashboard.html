@@ -1,0 +1,33 @@
+<h2>Admin Dashboard</h2>
+
+<!-- Calendar -->
+<label for="date">Select a Date:</label>
+<input type="date" [(ngModel)]="selectedDate" />
+
+<div *ngIf="hasAppointment(selectedDate)">
+  <p>📌 Appointment(s) booked on this day.</p>
+</div>
+
+<!-- Add Services -->
+<h3>Services You Offer</h3>
+<input [(ngModel)]="newService" placeholder="Add service..." />
+<button (click)="addService()">Add</button>
+<ul>
+  <li *ngFor="let service of availableServices">{{ service }}</li>
+</ul>
+
+<!-- Set Availability -->
+<h3>Your Availability</h3>
+<input [(ngModel)]="newAvailability" placeholder="Add availability..." />
+<button (click)="addAvailability()">Add</button>
+<ul>
+  <li *ngFor="let slot of availability">{{ slot }}</li>
+</ul>
+
+<!-- View Bookings -->
+<h3>Your Bookings</h3>
+<ul>
+  <li *ngFor="let b of bookings">
+    {{ b.appointmentDate }} &#64; {{ b.appointmentTime }} - {{ b.stylist }} ({{ b.service }})
+  </li>
+</ul>

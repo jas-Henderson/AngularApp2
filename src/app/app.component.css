@@ -1,0 +1,12 @@
+nav {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+a {
+  text-decoration: none;
+  color: #b91c1c; /* Your deep cherry red accent */
+}
+a:hover {
+  text-decoration: underline;
+}

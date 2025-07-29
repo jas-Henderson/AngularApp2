@@ -1,0 +1,57 @@
+:root {
+  --primary-color: #9e0b0f;     /* Cherry Red */
+  --secondary-color: #ffffff;  /* White */
+  --accent-color: #000000;     /* Black */
+
+  --bg-light: #ffffff;
+  --bg-dark: #000000;
+  --text-light: #ffffff;
+  --text-dark: #000000;
+  --border-radius: 8px;
+  --transition-speed: 0.3s;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+}
+/* app.component.html styles */
+.app-container {
+  padding: 2rem;
+  max-width: 960px;
+  margin: auto;
+}
+
+.app-header {
+  text-align: center;
+  background-color: var(--accent-color);
+  color: var(--text-light);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+}
+
+/* Reusable UI Components */
+.btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+}
+
+.btn:hover {
+  background-color: #7b0a0d;
+}
+
+.card {
+  background-color: var(--bg-light);
+  border: 1px solid var(--accent-color);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
