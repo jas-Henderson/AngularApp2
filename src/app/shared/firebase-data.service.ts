@@ -6,10 +6,14 @@ import {
   get,
   set,
   child,
+  query,
+  orderByChild,
+  equalTo,
+  onValue
 } from '@angular/fire/database';
+
 import { Observable, from } from 'rxjs';
 import { Booking } from './booking.model';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -34,20 +38,30 @@ export class FirebaseDataService {
   }
 
   // Get bookings for a specific stylist and date
-  getBookingsForStylist(stylist: string, date: string): Observable<Booking[]> {
-    const dbRef = ref(this.db);
-    return from(
-      get(child(dbRef, 'bookings')).then(snapshot => {
-        if (!snapshot.exists()) return [];
-        const allBookings = Object.values(snapshot.val()) as Booking[];
-        return allBookings.filter(
-          b =>
-            b.stylist === stylist &&
-            b.appointmentDate === date
-        );
-      })
-    );
-  }
+  getBookingsForStylist(stylistEmail: string, date: string): Observable<Booking[]> {
+  const bookingsRef = ref(this.db, 'bookings');
+  const bookingsQuery = query(
+    bookingsRef,
+    orderByChild('stylistEmail'),
+    equalTo(stylistEmail)
+  );
+
+  return new Observable<Booking[]>((observer) => {
+    onValue(bookingsQuery, (snapshot) => {
+      const data = snapshot.val();
+      const results: Booking[] = [];
+
+      for (let key in data) {
+        const booking = data[key];
+        if (booking.appointmentDate === date) {
+          results.push(booking);
+        }
+      }
+
+      observer.next(results);
+    });
+  });
+}
 
   // Save selected services for a stylist
   saveStylistServices(stylistId: string, services: string[]): Promise<void> {
@@ -97,22 +111,21 @@ export class FirebaseDataService {
   }
 
   // Get all stylists (for admin dropdown)
-  getAllStylists(): Observable<
-    { id: string; name: string; email: string }[]
-  > {
-    const stylistsRef = ref(this.db, 'stylists');
-    return from(
-      get(stylistsRef).then(snapshot => {
-        if (!snapshot.exists()) return [];
-        const data = snapshot.val();
-        return Object.entries(data).map(([id, stylist]: [string, any]) => ({
-          id,
-          name: stylist.name,
-          email: stylist.email || '',
-        }));
-      })
-    );
-  }
+  getAllStylists(): Observable<{ id: string; name: string; email: string }[]> {
+  const stylistsRef = ref(this.db, 'stylists');
+  return from(
+    get(stylistsRef).then(snapshot => {
+      if (!snapshot.exists()) return [];
+      const data = snapshot.val();
+
+      return Object.entries(data).map(([id, stylist]: [string, any]) => ({
+        id,
+        name: stylist.name,
+        email: stylist.email || '',
+      }));
+    })
+  );
+}
 
   // Save stylist profile (name & email)
   saveStylistProfile(
@@ -127,12 +140,5 @@ export class FirebaseDataService {
     });
   }
 
-  // Save stylist info (redundant, but can be reused separately if needed)
-  saveStylistInfo(
-    uid: string,
-    data: { name: string; email: string }
-  ): Promise<void> {
-    const refPath = ref(this.db, `stylists/${uid}`);
-    return set(refPath, data);
-  }
+
 }

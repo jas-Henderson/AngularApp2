@@ -7,19 +7,20 @@
   <label for="stylist">Select Stylist:</label>
   <select
     id="stylist"
-    [(ngModel)]="stylist"
+    [(ngModel)]="selectedStylist"
     (change)="loadAvailableTimes()"
     required
-  >
-    <option value="" disabled selected>Select a stylist</option>
-    <option *ngFor="let s of stylists" [value]="s.id">{{ s.name }}</option>
-  </select>
+>
+  <option value="" disabled selected>Select a stylist</option>
+  <option *ngFor="let s of stylists" [value]="s.email">{{ s.name }}</option>
+</select>
 
   <!-- Service -->
   <label for="service">Select Service:</label>
   <select
     id="service"
     [(ngModel)]="selectedService"
+    name="service"
     (change)="onServiceChange()"
     required
   >
@@ -34,8 +35,9 @@
   <input
     type="date"
     id="appointmentDate"
+    name="appointmentDate"
     [(ngModel)]="appointmentDate"
-    (change)="loadAvailableTimes()"
+    (change)="onStylistOrDateChange()"
     required
   />
 
@@ -43,6 +45,7 @@
   <label for="appointmentTime">Select Time:</label>
   <select
     id="appointmentTime"
+    name="appointmentTime"
     [(ngModel)]="appointmentTime"
     required
     [disabled]="availableTimes.length === 0"
@@ -56,7 +59,10 @@
   </select>
 
   <!-- Submit -->
-  <button (click)="submitBooking()" [disabled]="!stylist || !selectedService || !appointmentDate || !appointmentTime">
+  <button
+    (click)="submitBooking()"
+    [disabled]="!selectedStylist || !selectedService || !appointmentDate || !appointmentTime"
+  >
     Book Appointment
   </button>
 

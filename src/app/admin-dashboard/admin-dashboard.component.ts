@@ -4,14 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { FirebaseDataService } from '../shared/firebase-data.service';
 import { Booking } from '../shared/booking.model';
 import { SERVICES } from '../shared/constants';
-import { getAuth, createUserWithEmailAndPassword } from '@angular/fire/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signOut,
+} from '@angular/fire/auth';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
   templateUrl: './admin-dashboard.html',
   styleUrls: ['./admin-dashboard.css'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
 })
 export class AdminDashboardComponent implements OnInit {
   // Auth
@@ -66,7 +71,7 @@ export class AdminDashboardComponent implements OnInit {
       const normalizedEmail = this.stylistEmail.trim().toLowerCase();
       this.firebaseService
         .getBookingsForStylist(normalizedEmail, this.selectedDate)
-        .subscribe(data => {
+        .subscribe((data) => {
           this.bookings = data;
         });
     }
@@ -74,7 +79,7 @@ export class AdminDashboardComponent implements OnInit {
 
   // Load all bookings (optional for admin reporting)
   loadFullSchedule() {
-    this.firebaseService.getBookings().then(data => {
+    this.firebaseService.getBookings().then((data) => {
       this.fullSchedule = data;
     });
   }
@@ -89,22 +94,24 @@ export class AdminDashboardComponent implements OnInit {
 
   // Load services from Firebase
   loadServices() {
-    this.firebaseService.getStylistServices(this.stylistId).subscribe(data => {
+    this.firebaseService.getStylistServices(this.stylistId).subscribe((data) => {
       this.selectedServices = data;
     });
   }
 
   // Load availability from Firebase
   loadAvailabilityForDate(date: string) {
-    this.firebaseService.getStylistAvailability(this.stylistId, date).subscribe(times => {
-      this.availability[date] = times;
-    });
+    this.firebaseService
+      .getStylistAvailability(this.stylistId, date)
+      .subscribe((times) => {
+        this.availability[date] = times;
+      });
   }
 
   // Toggle checkbox for offered services
   toggleService(serviceName: string) {
     if (this.selectedServices.includes(serviceName)) {
-      this.selectedServices = this.selectedServices.filter(s => s !== serviceName);
+      this.selectedServices = this.selectedServices.filter((s) => s !== serviceName);
     } else {
       this.selectedServices.push(serviceName);
     }
@@ -120,7 +127,10 @@ export class AdminDashboardComponent implements OnInit {
     if (!this.availability[this.availabilityDate]) {
       this.availability[this.availabilityDate] = [];
     }
-    if (this.newAvailabilityTime && !this.availability[this.availabilityDate].includes(this.newAvailabilityTime)) {
+    if (
+      this.newAvailabilityTime &&
+      !this.availability[this.availabilityDate].includes(this.newAvailabilityTime)
+    ) {
       this.availability[this.availabilityDate].push(this.newAvailabilityTime);
       this.firebaseService.saveStylistAvailability(
         this.stylistId,
@@ -133,7 +143,7 @@ export class AdminDashboardComponent implements OnInit {
 
   removeAvailabilityTime(time: string) {
     const times = this.availability[this.availabilityDate];
-    this.availability[this.availabilityDate] = times.filter(t => t !== time);
+    this.availability[this.availabilityDate] = times.filter((t) => t !== time);
     this.firebaseService.saveStylistAvailability(
       this.stylistId,
       this.availabilityDate,
@@ -142,17 +152,17 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   hasAppointment(date: string): boolean {
-    return this.bookings.some(b => b.appointmentDate === date);
+    return this.bookings.some((b) => b.appointmentDate === date);
   }
 
-  //  Register new stylist
+  // Register new stylist
   registerStylist() {
     const auth = getAuth();
     this.stylistRegistrationSuccess = false;
     this.stylistRegistrationError = '';
 
     createUserWithEmailAndPassword(auth, this.newStylist.email, this.newStylist.password)
-      .then(userCredential => {
+      .then((userCredential) => {
         const uid = userCredential.user.uid;
         const email = this.newStylist.email.trim().toLowerCase(); // Normalize
         return this.firebaseService.saveStylistProfile(uid, email, this.newStylist.name);
@@ -162,9 +172,28 @@ export class AdminDashboardComponent implements OnInit {
         this.newStylist = { name: '', email: '', password: '' };
         this.loadFullSchedule(); // Optional refresh
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
         this.stylistRegistrationError = error.message;
+      });
+  }
+
+  // 🔐 Logout
+  logout() {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        this.stylistId = '';
+        this.stylistEmail = '';
+        this.bookings = [];
+        this.selectedServices = [];
+        this.availability = {};
+        alert('You have been logged out.');
+        // Optional: use router to redirect
+        // this.router.navigate(['/login']);
+      })
+      .catch((error) => {
+        console.error('Logout failed:', error);
       });
   }
 }

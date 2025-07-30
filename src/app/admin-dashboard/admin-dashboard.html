@@ -27,8 +27,11 @@
     </div>
   </section>
 
-  <!-- Display logged-in stylist -->
-  <p *ngIf="stylistEmail"><strong>Logged in as:</strong> {{ stylistEmail }}</p>
+  <!-- Display logged-in stylist and logout button -->
+  <div class="auth-info" *ngIf="stylistEmail">
+    <p><strong>Logged in as:</strong> {{ stylistEmail }}</p>
+    <button (click)="logout()" class="logout-btn">Logout</button>
+  </div>
 
   <!-- Date Selection -->
   <section class="card">

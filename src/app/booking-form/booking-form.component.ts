@@ -13,7 +13,7 @@ import { Booking } from '../shared/booking.model';
   imports: [CommonModule, FormsModule],
 })
 export class BookingFormComponent implements OnInit {
-  stylist = ''; // stylist UID
+  selectedStylist = ''; // stylist email selected by the user
   selectedService = '';
   appointmentDate = '';
   appointmentTime = '';
@@ -50,12 +50,9 @@ export class BookingFormComponent implements OnInit {
   }
 
   loadAvailableTimes() {
-    if (this.stylist && this.appointmentDate) {
-      const selectedStylist = this.stylists.find((s) => s.id === this.stylist);
-      if (!selectedStylist) return;
-
+    if (this.selectedStylist && this.appointmentDate) {
       this.firebaseDataService
-        .getBookingsForStylist(selectedStylist.email, this.appointmentDate)
+        .getBookingsForStylist(this.selectedStylist, this.appointmentDate)
         .subscribe((bookings: Booking[]) => {
           const bookedTimes = bookings.map((b) => b.appointmentTime);
           this.availableTimes = this.allTimes.filter((time) => !bookedTimes.includes(time));
@@ -66,12 +63,15 @@ export class BookingFormComponent implements OnInit {
   }
 
   submitBooking() {
-    const selectedStylist = this.stylists.find((s) => s.id === this.stylist);
-    if (!selectedStylist) return;
+    const stylist = this.stylists.find(s => s.email === this.selectedStylist);
+    if (!stylist) {
+      console.error('Invalid stylist selection');
+      return;
+    }
 
     const booking: Booking = {
-      stylist: selectedStylist.name,
-      stylistEmail: selectedStylist.email.trim().toLowerCase(),
+      stylist: stylist.name,
+      stylistEmail: stylist.email.trim().toLowerCase(), // ensures it matches Firebase auth
       service: this.selectedService,
       appointmentDate: this.appointmentDate,
       appointmentTime: this.appointmentTime,
@@ -85,7 +85,7 @@ export class BookingFormComponent implements OnInit {
   }
 
   resetForm() {
-    this.stylist = '';
+    this.selectedStylist = '';
     this.selectedService = '';
     this.appointmentDate = '';
     this.appointmentTime = '';

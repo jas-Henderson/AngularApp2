@@ -29,3 +29,18 @@ ul {
   margin-bottom: 1.5rem;
   border-radius: 6px;
 }
+
+.logout-btn {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;
+}
