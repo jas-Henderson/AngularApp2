@@ -1,0 +1,54 @@
+// src/theme.scss
+@use '@angular/material' as mat;
+
+// ✅ Override Material system color tokens with your brand
+html {
+  @include mat.theme((
+    color: (
+      primary: (
+        base: #7b1e3a,     // Deep Burgundy Cherry
+      ),
+      surface: #fdf6f0,     // Cream
+      background: #fdf6f0,
+      on-surface: #121212,  // Off Black
+      on-background: #121212,
+    ),
+    typography: (
+      brand: 'Roboto, "Helvetica Neue", sans-serif',
+    ),
+    density: 0
+  ));
+
+  // ✅ Fix Angular Material overlays (mat-select, mat-datepicker) transparency issue
+  /* Force overlay panel backgrounds to be opaque */
+  .cdk-overlay-pane,
+  .mat-select-panel,
+  .mat-datepicker-content,
+  .mat-calendar,
+  .mat-option {
+    background-color: #ffffff !important;
+    color: #121212 !important;
+    z-index: 1000 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+    border-radius: 6px !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+  // Optional: high contrast fallback
+  ::ng-deep .mat-option:hover,
+  ::ng-deep .mat-calendar-body-cell:hover {
+    background-color: #f2e8e4 !important;
+  }
+}
+
+// ✅ Global base styles
+body {
+  color-scheme: light;
+
+  background-color: var(--mat-sys-color-background);
+  color: var(--mat-sys-color-on-surface);
+  font: var(--mat-sys-typescale-body-medium);
+
+  margin: 0;
+}

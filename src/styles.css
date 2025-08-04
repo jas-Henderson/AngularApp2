@@ -1,23 +1,36 @@
+/* ======================
+   THEME COLOR VARIABLES
+========================= */
 :root {
-  --primary-color: #9e0b0f;     /* Cherry Red */
+  --primary-color: #9e0b0f;     /* Deep Cherry Red */
   --secondary-color: #ffffff;  /* White */
   --accent-color: #000000;     /* Black */
+  --off-black: #1C1C1C;         /* Soft Black for backgrounds */
+  --grey: #888888;              /* Neutral grey */
+  --cream: #FAF3E0;             /* Light cream background */
 
-  --bg-light: #ffffff;
-  --bg-dark: #000000;
+  --bg-light: var(--cream);
+  --bg-dark: var(--off-black);
   --text-light: #ffffff;
-  --text-dark: #000000;
+  --text-dark: var(--off-black);
   --border-radius: 8px;
   --transition-speed: 0.3s;
 }
 
-body {
+/* ======================
+   GLOBAL BASE STYLES
+========================= */
+html, body {
+  height: 100%;
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Roboto', "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--bg-light);
   color: var(--text-dark);
 }
-/* app.component.html styles */
+
+/* ======================
+   MAIN LAYOUT WRAPPER
+========================= */
 .app-container {
   padding: 2rem;
   max-width: 960px;
@@ -32,7 +45,9 @@ body {
   border-radius: var(--border-radius);
 }
 
-/* Reusable UI Components */
+/* ======================
+   BUTTON STYLES
+========================= */
 .btn {
   padding: 0.5rem 1rem;
   background-color: var(--primary-color);
@@ -47,6 +62,9 @@ body {
   background-color: #7b0a0d;
 }
 
+/* ======================
+   CARD COMPONENT STYLES
+========================= */
 .card {
   background-color: var(--bg-light);
   border: 1px solid var(--accent-color);
@@ -54,4 +72,40 @@ body {
   border-radius: var(--border-radius);
   margin-bottom: 1rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ======================
+   ANGULAR MATERIAL OVERRIDES
+========================= */
+.mat-toolbar {
+  background-color: var(--off-black) !important;
+  color: var(--text-light) !important;
+}
+
+.mat-card {
+  background-color: var(--secondary-color) !important;
+  color: var(--text-dark) !important;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mat-raised-button.mat-primary {
+  background-color: var(--primary-color) !important;
+  color: var(--text-light) !important;
+}
+
+.mat-raised-button.mat-accent {
+  background-color: var(--off-black) !important;
+  color: var(--text-light) !important;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: #fff;
+}
+
+/* Add spacing between Material components */
+.mat-form-field,
+.mat-card,
+.mat-button {
+  margin-bottom: 1rem;
 }

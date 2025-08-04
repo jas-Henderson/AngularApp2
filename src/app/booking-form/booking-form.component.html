@@ -1,0 +1,106 @@
+<!-- src/app/booking-form/booking-form.component.html -->
+<div class="booking-container">
+  <!-- Left image section -->
+  <div class="booking-image">
+    <img src="assets/images/SalonService.jpg" alt="Salon stylist" />
+  </div>
+
+  <!-- Right form section -->
+  <div class="booking-form">
+    <h1 class="form-title">
+      Let’s get you <span class="accent-text">pampered</span><span class="punctuation">!</span>
+    </h1>
+
+    <form>
+      <!-- Full Name & Phone -->
+      <div class="row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Full Name</mat-label>
+          <input matInput [(ngModel)]="fullName" name="fullName" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Phone Number</mat-label>
+          <input matInput [(ngModel)]="phoneNumber" name="phoneNumber" required />
+        </mat-form-field>
+      </div>
+
+      <!-- Email -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput [(ngModel)]="email" name="email" required />
+      </mat-form-field>
+
+      <!-- Date & Time -->
+      <div class="row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Preferred Date</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="appointmentDate" name="appointmentDate" (dateChange)="onStylistOrDateChange()" required />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Preferred Time</mat-label>
+          <mat-select [(ngModel)]="appointmentTime" name="appointmentTime" [disabled]="availableTimes.length === 0" required>
+            <mat-option value="" disabled>
+              {{ availableTimes.length === 0 ? 'No times available' : 'Select a time' }}
+            </mat-option>
+            <mat-option *ngFor="let time of availableTimes" [value]="time">
+              {{ time }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Stylist -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Select Stylist</mat-label>
+        <mat-select [(ngModel)]="selectedStylist" (selectionChange)="loadAvailableTimes()" name="stylist" required>
+          <mat-option value="" disabled>Select a stylist from the drop down</mat-option>
+          <mat-option *ngFor="let s of stylists" [value]="s.email">{{ s.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Service -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Select Service</mat-label>
+        <mat-select [(ngModel)]="selectedService" name="service" (selectionChange)="onServiceChange()" required>
+          <mat-option value="" disabled>Select a service from the drop down</mat-option>
+          <mat-option *ngFor="let service of services" [value]="service.name">
+            {{ service.name }} ({{ service.duration }} mins)
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Notes -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Special Notes & Requests</mat-label>
+        <textarea matInput [(ngModel)]="notes" name="notes" rows="3"></textarea>
+      </mat-form-field>
+
+      <!-- Uploads -->
+      <div class="row upload-section">
+        <div class="upload-box">
+          <label>Current Hair Photo</label>
+          <input type="file" />
+        </div>
+        <div class="upload-box">
+          <label>Inspiration Photo</label>
+          <input type="file" />
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="submit-section">
+        <button mat-raised-button color="primary" class="submit-btn"
+          (click)="submitBooking()"
+          [disabled]="!selectedStylist || !selectedService || !appointmentDate || !appointmentTime || isLoading">
+          Book Now
+        </button>
+
+        <mat-progress-spinner *ngIf="isLoading" diameter="30" mode="indeterminate" color="primary"></mat-progress-spinner>
+      </div>
+    </form>
+  </div>
+</div>

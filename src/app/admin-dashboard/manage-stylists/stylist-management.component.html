@@ -1,0 +1,63 @@
+<!-- src/app/admin-dashboard/manage-stylists/stylist-management.component.html -->
+
+<div class="stylist-management-container">
+  <div class="add-stylist-form">
+    <h2>Add New Stylist</h2>
+    <form (ngSubmit)="registerStylist()" #stylistForm="ngForm">
+      <div class="form-group">
+        <mat-form-field appearance="outline">
+          <mat-label>Full Name</mat-label>
+          <input matInput name="name" [(ngModel)]="newStylist.name" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Phone Number</mat-label>
+          <input matInput name="phone" [(ngModel)]="newStylist.phone" required />
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" name="email" [(ngModel)]="newStylist.email" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" name="password" [(ngModel)]="newStylist.password" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Select all services the Stylist can perform</mat-label>
+        <mat-select name="services" [(ngModel)]="newStylist.services" multiple>
+          <mat-option *ngFor="let service of allServices" [value]="service">
+            {{ service }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="!stylistForm.valid">
+        Add Stylist
+      </button>
+
+      <div *ngIf="stylistRegistrationSuccess" class="success-msg">
+        ✅ Stylist account created successfully!
+      </div>
+      <div *ngIf="stylistRegistrationError" class="error-msg">
+        ⚠️ {{ stylistRegistrationError }}
+      </div>
+    </form>
+  </div>
+
+  <div class="current-stylists">
+    <h2>Current Stylists</h2>
+    <div *ngFor="let stylist of currentStylists" class="stylist-card">
+      <div>
+        <p class="stylist-name">{{ stylist.name }}</p>
+        <p class="stylist-services">{{ stylist.services?.join(', ') }}</p>
+      </div>
+      <button mat-icon-button (click)="openEditDialog(stylist)">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

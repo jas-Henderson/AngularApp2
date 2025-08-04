@@ -1,0 +1,21 @@
+@use '@angular/material' as mat;
+
+// Define your brand color palette
+$my-primary: mat.define-palette(mat.$gray-palette, 900, 500, 100);
+$my-accent: mat.define-palette(mat.$red-palette, A700, A200, A100);
+$my-warn: mat.define-palette(mat.$deep-orange-palette);
+
+// Override Material theme with your custom colors
+$my-theme: mat.define-light-theme((
+  color: (
+    primary: $my-primary,
+    accent: $my-accent,
+    warn: $my-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+// Include Material core and theme styles
+@include mat.core();
+@include mat.all-component-themes($my-theme);

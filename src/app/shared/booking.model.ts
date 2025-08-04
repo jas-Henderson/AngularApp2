@@ -1,8 +1,13 @@
 export interface Booking {
-  stylist: string;            // Stylist's display name
-  stylistEmail: string;       // Stylist's email (used for filtering)
-  service: string;            // Service selected
-  appointmentDate: string;    // yyyy-mm-dd format
-  appointmentTime: string;    // HH:mm format
-  duration: number;           // Duration in minutes
+  id?: string; // Optional ID for Firebase
+  stylist: string;
+  stylistEmail: string;
+  service: string;
+  appointmentDate: string;
+  appointmentTime: string;
+  duration: number;
+  clientName: string;
+  phone?: string;
+  notes?: string;
+  imageUrls?: string[];
 }

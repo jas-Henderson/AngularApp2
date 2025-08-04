@@ -1,98 +1,182 @@
-<div class="dashboard">
-  <h2>Admin Dashboard</h2>
-
-  <!-- Register New Stylist -->
-  <section class="card">
-    <h3>Register New Stylist</h3>
-    <form (ngSubmit)="registerStylist()" #stylistForm="ngForm">
-      <label>
-        Name:
-        <input type="text" name="name" [(ngModel)]="newStylist.name" required />
-      </label>
-      <label>
-        Email:
-        <input type="email" name="email" [(ngModel)]="newStylist.email" required />
-      </label>
-      <label>
-        Password:
-        <input type="password" name="password" [(ngModel)]="newStylist.password" required />
-      </label>
-      <button type="submit" [disabled]="!stylistForm.valid">Register Stylist</button>
-    </form>
-    <div *ngIf="stylistRegistrationSuccess" class="success-msg">
-      ✅ Stylist account created successfully!
-    </div>
-    <div *ngIf="stylistRegistrationError" class="error-msg">
-      ⚠️ {{ stylistRegistrationError }}
-    </div>
-  </section>
-
-  <!-- Display logged-in stylist and logout button -->
-  <div class="auth-info" *ngIf="stylistEmail">
-    <p><strong>Logged in as:</strong> {{ stylistEmail }}</p>
-    <button (click)="logout()" class="logout-btn">Logout</button>
+<!-- Header / Navigation -->
+<div class="admin-header">
+  <div class="logo-section">
+    <img src="assets/images/WhiteLogo.png" alt="Venice Hannah Morales Logo" class="admin-logo" />
   </div>
 
-  <!-- Date Selection -->
-  <section class="card">
-    <h3>Select a Date</h3>
-    <input
-      type="date"
-      [ngModel]="selectedDate"
-      (ngModelChange)="onDateChange($event)"
-    />
-    <div *ngIf="hasAppointment(selectedDate)">
-      <p>📌 Appointment(s) booked on this day.</p>
+  <div class="nav-content">
+    <h1 class="dashboard-title">Admin Dashboard</h1>
+    <div class="welcome-logout">
+      <span class="welcome-message">Welcome, {{ stylistEmail || 'Admin' }}</span>
+      <button mat-stroked-button color="primary" (click)="logout()" class="logout-button">
+        <mat-icon>arrow_back</mat-icon> Logout
+      </button>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- Services You Offer -->
-  <section class="card">
-    <h3>Services You Offer</h3>
-    <div *ngFor="let service of services">
-      <label>
-        <input
-          type="checkbox"
-          [checked]="selectedServices.includes(service.name)"
-          (change)="toggleService(service.name)"
-        />
-        {{ service.name }} ({{ service.duration }} mins)
-      </label>
+<!-- Tab Navigation -->
+<div class="tab-navigation">
+  <button mat-button [class.active-tab]="selectedTab === 'availability'" (click)="selectedTab = 'availability'">
+    Calendar & Availability
+  </button>
+  <button mat-button [class.active-tab]="selectedTab === 'appointments'" (click)="selectedTab = 'appointments'">
+    Appointments
+  </button>
+  <button mat-button [class.active-tab]="selectedTab === 'stylists'" (click)="selectedTab = 'stylists'">
+    Manage Stylists
+  </button>
+</div>
+
+<!-- Calendar & Availability Tab -->
+<div *ngIf="selectedTab === 'availability'">
+  <div class="availability-calendar-wrapper">
+    <!-- Left Side: Set Availability -->
+    <div class="availability-section">
+      <h2><strong><em>Set Availability</em></strong></h2>
+      <form (ngSubmit)="onUpdateAvailability()" #availabilityForm="ngForm">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Select Stylist</mat-label>
+          <mat-select [(ngModel)]="selectedStylistId" name="selectedStylistId" required>
+            <mat-option *ngFor="let stylist of stylists" [value]="stylist.id">
+              {{ stylist.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="startPicker"
+                 [(ngModel)]="availabilityStartDate" name="availabilityStartDate" required />
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="endPicker"
+                 [(ngModel)]="availabilityEndDate" name="availabilityEndDate" required />
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+
+        <!-- Start Time -->
+        <div class="time-select-group">
+          <mat-label>Start Time *</mat-label>
+          <div class="time-row">
+            <mat-form-field appearance="outline">
+              <mat-select [(ngModel)]="startHour" name="startHour" required>
+                <mat-option *ngFor="let h of hours" [value]="h">{{ h }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-select [(ngModel)]="startMinute" name="startMinute" required>
+                <mat-option *ngFor="let m of minutes" [value]="m">{{ m }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-select [(ngModel)]="startMeridian" name="startMeridian" required>
+                <mat-option *ngFor="let p of meridianOptions" [value]="p">{{ p }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- End Time -->
+        <div class="time-select-group">
+          <mat-label>End Time *</mat-label>
+          <div class="time-row">
+            <mat-form-field appearance="outline">
+              <mat-select [(ngModel)]="endHour" name="endHour" required>
+                <mat-option *ngFor="let h of hours" [value]="h">{{ h }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-select [(ngModel)]="endMinute" name="endMinute" required>
+                <mat-option *ngFor="let m of minutes" [value]="m">{{ m }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-select [(ngModel)]="endMeridian" name="endMeridian" required>
+                <mat-option *ngFor="let p of meridianOptions" [value]="p">{{ p }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <button
+          mat-raised-button
+          color="primary"
+          class="update-btn"
+          type="submit"
+          [disabled]="!availabilityForm.valid">
+          <mat-icon>check_circle</mat-icon>
+          Update Availability
+        </button>
+      </form>
     </div>
-  </section>
 
-  <!-- Availability for Selected Date -->
-  <section class="card">
-    <h3>Your Availability on {{ selectedDate }}</h3>
-    <input
-      [(ngModel)]="newAvailabilityTime"
-      type="time"
-      placeholder="Add available time"
-    />
-    <button (click)="addAvailabilityTime()">Add</button>
+    <!-- Right Side: Calendar View -->
+    <div class="calendar-section">
+      <h2><strong><em>Calendar View</em></strong></h2>
 
-    <ul *ngIf="(availability[selectedDate]?.length || 0) > 0; else noAvailability">
-      <li *ngFor="let time of (availability[selectedDate] || [])">
-        {{ time }}
-        <button (click)="removeAvailabilityTime(time)">Remove</button>
-      </li>
-    </ul>
-    <ng-template #noAvailability>
-      <p>No availability set for this date.</p>
-    </ng-template>
-  </section>
+      <!-- Legend -->
+      <div class="legend">
+        <div><span class="legend-box not-current"></span> not part of current month</div>
+        <div><span class="legend-box no-appointments"></span> No Appointments</div>
+        <div><span class="legend-box appointments"></span> Appointments</div>
+        <div><span class="legend-box closed"></span> Salon Closed</div>
+      </div>
 
-  <!-- Bookings List -->
-  <section class="card">
-    <h3>Your Bookings on {{ selectedDate }}</h3>
-    <ul *ngIf="bookings.length > 0; else noBookings">
-      <li *ngFor="let b of bookings">
-        📆 {{ b.appointmentDate }} &#64; {{ b.appointmentTime }} -
-        <strong>{{ b.service }}</strong> ({{ b.stylist }})
-      </li>
-    </ul>
-    <ng-template #noBookings>
-      <p>No bookings found for this date.</p>
-    </ng-template>
-  </section>
+      <!-- Month Navigation -->
+      <div class="month-nav">
+        <button mat-icon-button (click)="prevMonth()">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <span class="month-label">{{ getMonthYear() }}</span>
+        <button mat-icon-button (click)="nextMonth()">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+
+      <!-- Calendar Table -->
+      <table class="calendar-table">
+        <thead>
+          <tr>
+            <th *ngFor="let day of daysOfWeek">{{ day }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let week of calendarGrid">
+            <td *ngFor="let day of week"
+                [ngClass]="{
+                  'not-current': isNotCurrentMonth(day),
+                  'closed': isClosed(day),
+                  'appointment': hasAppointmentSafe(day)
+                }"
+                (click)="onSelectCalendarDate(day)">
+              {{ isDateInvalid(day) ? '' : getDayNumber(day) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Appointments Tab -->
+<div *ngIf="selectedTab === 'appointments'">
+  <app-appointments-view
+    [bookings]="bookings"
+    [selectedDate]="selectedDate"
+    (dateChanged)="onDateChange($event)">
+  </app-appointments-view>
+</div>
+
+<!-- Manage Stylists Tab -->
+<div *ngIf="selectedTab === 'stylists'">
+  <app-stylist-management
+    [stylists]="stylists"
+    (refresh)="loadStylists()">
+  </app-stylist-management>
 </div>

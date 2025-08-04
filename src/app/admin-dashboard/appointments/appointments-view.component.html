@@ -1,0 +1,56 @@
+<div class="appointments-container">
+  <div class="appointments-left">
+    <h2>Appointments on {{ selectedDate || '&lt;date&gt;' }}</h2>
+
+    <mat-form-field appearance="outline" class="date-picker">
+      <mat-label>Select a Date to update the Appointments</mat-label>
+      <input matInput [matDatepicker]="picker" (dateChange)="onDateChange($event)" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div *ngIf="bookings.length > 0; else noBookings">
+      <mat-card *ngFor="let b of bookings" class="booking-card" (click)="selectAppointment(b)">
+        <mat-card-title>
+          <strong>{{ b.clientName }}</strong>
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{ b.service }}, {{ b.stylist }}
+        </mat-card-subtitle>
+        <mat-card-content>
+          {{ b.appointmentDate }} at {{ b.appointmentTime }}
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <ng-template #noBookings>
+      <p>No bookings found for this date.</p>
+    </ng-template>
+  </div>
+
+  <div class="appointments-right">
+    <h2>Appointment Details</h2>
+    <div class="appointment-details-box" *ngIf="selectedAppointment; else noSelection">
+      <p><strong>Client:</strong> {{ selectedAppointment.clientName }}</p>
+      <p><strong>Service:</strong> {{ selectedAppointment.service }}</p>
+      <p><strong>Stylist:</strong> {{ selectedAppointment.stylist }}</p>
+      <p><strong>Date:</strong> {{ selectedAppointment.appointmentDate }}</p>
+      <p><strong>Time:</strong> {{ selectedAppointment.appointmentTime }}</p>
+      <p><strong>Phone:</strong> {{ selectedAppointment.phone || 'N/A' }}</p>
+      <p><strong>Notes:</strong> {{ selectedAppointment.notes || 'None' }}</p>
+      <div *ngIf="selectedAppointment.imageUrls?.length">
+        <p><strong>Images:</strong></p>
+        <img *ngFor="let img of selectedAppointment.imageUrls" [src]="img" class="booking-image" />
+      </div>
+      <div class="actions">
+        <button mat-stroked-button class="cancel-btn" (click)="cancelAppointment()">Cancel Appointment</button>
+        <button mat-stroked-button class="close-btn" (click)="closeAppointmentDetails()">Close Details</button>
+      </div>
+    </div>
+    <ng-template #noSelection>
+      <div class="appointment-details-box">
+        <p>Please select a client’s appointment to view details</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

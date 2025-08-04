@@ -1,73 +1,92 @@
-<!-- src/app/booking-form/booking-form.html -->
+<!-- src/app/booking-form/booking-form.component.html -->
 
-<div class="booking-form">
-  <h2>Book an Appointment</h2>
+<mat-card class="booking-form-card">
+  <mat-card-title>Book an Appointment</mat-card-title>
+  <mat-card-content>
 
-  <!-- Stylist -->
-  <label for="stylist">Select Stylist:</label>
-  <select
-    id="stylist"
-    [(ngModel)]="selectedStylist"
-    (change)="loadAvailableTimes()"
-    required
->
-  <option value="" disabled selected>Select a stylist</option>
-  <option *ngFor="let s of stylists" [value]="s.email">{{ s.name }}</option>
-</select>
+    <!-- Stylist -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Select Stylist</mat-label>
+      <mat-select
+        [(ngModel)]="selectedStylist"
+        (selectionChange)="loadAvailableTimes()"
+        required
+      >
+        <mat-option value="" disabled>Select a stylist</mat-option>
+        <mat-option *ngFor="let s of stylists" [value]="s.email">
+          {{ s.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <!-- Service -->
-  <label for="service">Select Service:</label>
-  <select
-    id="service"
-    [(ngModel)]="selectedService"
-    name="service"
-    (change)="onServiceChange()"
-    required
-  >
-    <option value="" disabled selected>Select a service</option>
-    <option *ngFor="let service of services" [value]="service.name">
-      {{ service.name }} ({{ service.duration }} mins)
-    </option>
-  </select>
+    <!-- Service -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Select Service</mat-label>
+      <mat-select
+        [(ngModel)]="selectedService"
+        name="service"
+        (selectionChange)="onServiceChange()"
+        required
+      >
+        <mat-option value="" disabled>Select a service</mat-option>
+        <mat-option *ngFor="let service of services" [value]="service.name">
+          {{ service.name }} ({{ service.duration }} mins)
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <!-- Date -->
-  <label for="appointmentDate">Select Date:</label>
-  <input
-    type="date"
-    id="appointmentDate"
-    name="appointmentDate"
-    [(ngModel)]="appointmentDate"
-    (change)="onStylistOrDateChange()"
-    required
-  />
+    <!-- Date -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Select Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [(ngModel)]="appointmentDate"
+        name="appointmentDate"
+        (dateChange)="onStylistOrDateChange()"
+        required
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
 
-  <!-- Time -->
-  <label for="appointmentTime">Select Time:</label>
-  <select
-    id="appointmentTime"
-    name="appointmentTime"
-    [(ngModel)]="appointmentTime"
-    required
-    [disabled]="availableTimes.length === 0"
-  >
-    <option value="" disabled selected>
-      {{ availableTimes.length === 0 ? 'No available times' : 'Select a time' }}
-    </option>
-    <option *ngFor="let time of availableTimes" [value]="time">
-      {{ time }}
-    </option>
-  </select>
+    <!-- Time -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Select Time</mat-label>
+      <mat-select
+        [(ngModel)]="appointmentTime"
+        name="appointmentTime"
+        [disabled]="availableTimes.length === 0"
+        required
+      >
+        <mat-option value="" disabled>
+          {{ availableTimes.length === 0 ? 'No available times' : 'Select a time' }}
+        </mat-option>
+        <mat-option *ngFor="let time of availableTimes" [value]="time">
+          {{ time }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <!-- Submit -->
-  <button
-    (click)="submitBooking()"
-    [disabled]="!selectedStylist || !selectedService || !appointmentDate || !appointmentTime"
-  >
-    Book Appointment
-  </button>
+    <!-- Submit Button and Spinner -->
+    <div class="form-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="submitBooking()"
+        [disabled]="!selectedStylist || !selectedService || !appointmentDate || !appointmentTime || isLoading"
+      >
+        Book Appointment
+      </button>
 
-  <!-- Confirmation -->
-  <div *ngIf="showConfirmation" class="confirmation">
-    ✅ Your appointment has been successfully booked!
-  </div>
-</div>
+      <mat-progress-spinner
+        *ngIf="isLoading"
+        diameter="30"
+        mode="indeterminate"
+        color="primary"
+        style="margin-left: 1rem;"
+      ></mat-progress-spinner>
+    </div>
+
+  </mat-card-content>
+</mat-card>

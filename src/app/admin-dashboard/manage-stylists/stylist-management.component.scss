@@ -1,0 +1,101 @@
+// src/app/admin-dashboard/manage-stylists/stylist-management.component.scss
+
+.stylist-management-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2rem;
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+
+  .add-stylist-form,
+  .current-stylists {
+    flex: 1 1 45%;
+  }
+
+  .form-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    mat-form-field {
+      flex: 1;
+    }
+  }
+
+  .full-width {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  button[type="submit"] {
+    background-color: #6a1b1a;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.2rem;
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+      background-color: #541210;
+    }
+  }
+
+  .success-msg {
+    color: #2e7d32;
+    font-weight: 500;
+    margin-top: 1rem;
+  }
+
+  .error-msg {
+    color: #c62828;
+    font-weight: 500;
+    margin-top: 1rem;
+  }
+
+  .current-stylists {
+    .stylist-card {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      background-color: #f9f9f9;
+
+      .stylist-name {
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin: 0;
+      }
+
+      .stylist-services {
+        color: #666;
+        font-size: 0.95rem;
+        margin: 0.3rem 0 0;
+      }
+
+      button {
+        background: transparent;
+        color: #6a1b1a;
+
+        mat-icon {
+          font-size: 20px;
+        }
+
+        &:hover {
+          color: #a31616;
+        }
+      }
+    }
+  }
+}

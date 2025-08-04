@@ -1,0 +1,55 @@
+.appointments-container {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem;
+  flex-wrap: wrap;
+}
+
+.appointments-left,
+.appointments-right {
+  flex: 1 1 45%;
+  min-width: 300px;
+}
+
+.booking-card {
+  margin-bottom: 1rem;
+  cursor: pointer;
+  border: 1px solid #aaa;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-details-box {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+}
+
+.booking-image {
+  width: 100px;
+  height: auto;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+}
+
+.actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.cancel-btn {
+  background-color: #7b1e3a;
+  color: white;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  font-weight: bold;
+}
+
+.close-btn {
+  border: 1px solid #7b1e3a;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  font-weight: bold;
+  color: #7b1e3a;
+}
